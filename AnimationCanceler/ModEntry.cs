@@ -93,23 +93,15 @@ public sealed class ModEntry : Mod
 
         configMenu.AddSectionTitle(
             mod: ModManifest,
-            text: () => "Toggles"
+            text: () => "General"
         );
 
         configMenu.AddBoolOption(
             mod: ModManifest,
-            name: () => "Cancel Tools",
-            tooltip: () => "Enable animation canceling for gathering tools (Axe, Pickaxe, Hoe, Watering Can, Scythe).",
-            getValue: () => _config.CancelTools,
-            setValue: value => _config.CancelTools = value
-        );
-
-        configMenu.AddBoolOption(
-            mod: ModManifest,
-            name: () => "Cancel Weapons",
-            tooltip: () => "Enable animation canceling for melee weapons (Swords, Clubs, Daggers).",
-            getValue: () => _config.CancelWeapons,
-            setValue: value => _config.CancelWeapons = value
+            name: () => "Enabled",
+            tooltip: () => "Enable or disable tool animation canceling.",
+            getValue: () => _config.Enabled,
+            setValue: value => _config.Enabled = value
         );
 
         Monitor.Log("Generic Mod Config Menu integrated successfully.", LogLevel.Debug);

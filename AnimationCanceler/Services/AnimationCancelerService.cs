@@ -23,7 +23,7 @@ public sealed class AnimationCancelerService
 
     public void OnToolFunctionExecuted(Farmer player)
     {
-        if (!_config.CancelTools)
+        if (!_config.Enabled)
             return;
 
         if (!_helper.Input.IsDown(_config.HoldKey))
@@ -38,6 +38,9 @@ public sealed class AnimationCancelerService
 
     public void Update()
     {
+        if (!_config.Enabled)
+            return;
+
         if (!Context.IsWorldReady || !Context.IsPlayerFree)
             return;
 
@@ -52,23 +55,12 @@ public sealed class AnimationCancelerService
             return;
 
         Item? currentItem = player.CurrentItem;
-        if (currentItem is not Tool tool)
+        if (currentItem is not Tool tool || tool is MeleeWeapon)
             return;
 
-        bool isWeapon = tool is MeleeWeapon;
-        bool isScythe = isWeapon && ((MeleeWeapon)tool).isScythe();
-
-        if (isWeapon && !isScythe && !_config.CancelWeapons)
+        // Stamina protection: stop auto-swinging when at or below threshold
+        if (_config.PreventExhaustion && player.Stamina <= _config.MinimumStamina)
             return;
-        if ((!isWeapon || isScythe) && !_config.CancelTools)
-            return;
-
-        // Stamina protection: weapons and scythes consume 0 stamina
-        if (_config.PreventExhaustion && !isWeapon && !isScythe)
-        {
-            if (player.Stamina <= _config.MinimumStamina)
-                return;
-        }
 
         if (player.UsingTool)
         {
@@ -81,27 +73,14 @@ public sealed class AnimationCancelerService
 
             int animIndex = player.FarmerSprite.currentAnimationIndex;
 
-            if (isWeapon && !isScythe)
+            // Tool hit is primarily canceled via Tool.DoFunction Harmony postfix.
+            // Fallback: If animation reaches recovery frame, cancel.
+            int maxFrame = tool is WateringCan ? 2 : 3;
+            if (animIndex >= maxFrame)
             {
-                // Weapons deal damage on frame index 2; cancel once swipe damage phase completes
-                if (animIndex >= 2)
-                {
-                    player.completelyStopAnimatingOrDoingAction();
-                    player.forceCanMove();
-                    player.UsingTool = false;
-                }
-            }
-            else
-            {
-                // Tool hit is primarily canceled via Tool.DoFunction Harmony postfix.
-                // Fallback: If animation reaches recovery frame, cancel.
-                int maxFrame = tool is WateringCan ? 2 : 3;
-                if (animIndex >= maxFrame)
-                {
-                    player.completelyStopAnimatingOrDoingAction();
-                    player.forceCanMove();
-                    player.UsingTool = false;
-                }
+                player.completelyStopAnimatingOrDoingAction();
+                player.forceCanMove();
+                player.UsingTool = false;
             }
         }
         else if (player.CanMove)

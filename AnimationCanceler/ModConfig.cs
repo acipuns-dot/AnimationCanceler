@@ -8,6 +8,5 @@ public sealed class ModConfig
     public bool PreventExhaustion { get; set; } = true;
     public float MinimumStamina { get; set; } = 10f;
     public bool OnlyDrainStaminaOnHit { get; set; } = true;
-    public bool CancelTools { get; set; } = true;
-    public bool CancelWeapons { get; set; } = true;
+    public bool Enabled { get; set; } = true;
 }
