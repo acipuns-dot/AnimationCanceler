@@ -83,6 +83,14 @@ public sealed class ModEntry : Mod
             interval: 1f
         );
 
+        configMenu.AddBoolOption(
+            mod: ModManifest,
+            name: () => "Only Drain Stamina On Hit",
+            tooltip: () => "Refunds stamina when tool swings hit empty air or miss valid targets.",
+            getValue: () => _config.OnlyDrainStaminaOnHit,
+            setValue: value => _config.OnlyDrainStaminaOnHit = value
+        );
+
         configMenu.AddSectionTitle(
             mod: ModManifest,
             text: () => "Toggles"

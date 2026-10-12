@@ -7,6 +7,7 @@ namespace AnimationCanceler.Services;
 public sealed class AnimationCancelerService
 {
     public static AnimationCancelerService? Instance { get; private set; }
+    public static ModConfig? Config => Instance?._config;
 
     private readonly ModConfig _config;
     private readonly IModHelper _helper;
@@ -71,6 +72,13 @@ public sealed class AnimationCancelerService
 
         if (player.UsingTool)
         {
+            // Upgraded charging tools (Hoe, Watering Can) enter charging state when tool button is held.
+            // Since Space is held rather than vanilla tool button, release tool immediately to execute swing.
+            if (player.canReleaseTool)
+            {
+                player.EndUsingTool();
+            }
+
             int animIndex = player.FarmerSprite.currentAnimationIndex;
 
             if (isWeapon && !isScythe)
@@ -86,8 +94,9 @@ public sealed class AnimationCancelerService
             else
             {
                 // Tool hit is primarily canceled via Tool.DoFunction Harmony postfix.
-                // Fallback: If animation reaches recovery frame (index >= 3), cancel.
-                if (animIndex >= 3)
+                // Fallback: If animation reaches recovery frame, cancel.
+                int maxFrame = tool is WateringCan ? 2 : 3;
+                if (animIndex >= maxFrame)
                 {
                     player.completelyStopAnimatingOrDoingAction();
                     player.forceCanMove();
@@ -99,6 +108,10 @@ public sealed class AnimationCancelerService
         {
             // Initiate the swing on the next available tick
             Game1.pressUseToolButton();
+            if (player.UsingTool && player.canReleaseTool)
+            {
+                player.EndUsingTool();
+            }
         }
     }
 }
