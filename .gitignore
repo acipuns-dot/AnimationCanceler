@@ -1,0 +1,8 @@
+# .NET / Visual Studio
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+.vs/
+*.zip
+.superpowers/

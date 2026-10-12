@@ -1,0 +1,10 @@
+{
+  "Name": "Animation Canceler",
+  "Author": "User",
+  "Version": "1.0.0",
+  "Description": "Automatically cancels tool and weapon swing animations while holding the Space bar.",
+  "UniqueID": "User.AnimationCanceler",
+  "EntryDll": "AnimationCanceler.dll",
+  "MinimumApiVersion": "4.0.0",
+  "UpdateKeys": []
+}
