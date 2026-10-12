@@ -1,4 +1,3 @@
-using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Tools;
@@ -7,6 +6,8 @@ namespace AnimationCanceler.Services;
 
 public sealed class AnimationCancelerService
 {
+    public static AnimationCancelerService? Instance { get; private set; }
+
     private readonly ModConfig _config;
     private readonly IModHelper _helper;
     private readonly IMonitor _monitor;
@@ -16,6 +17,22 @@ public sealed class AnimationCancelerService
         _config = config;
         _helper = helper;
         _monitor = monitor;
+        Instance = this;
+    }
+
+    public void OnToolFunctionExecuted(Farmer player)
+    {
+        if (!_config.CancelTools)
+            return;
+
+        if (!_helper.Input.IsDown(_config.HoldKey))
+            return;
+
+        // Tool impact has just landed and DoFunction has completed.
+        // Immediately cut the post-impact recovery frames.
+        player.completelyStopAnimatingOrDoingAction();
+        player.forceCanMove();
+        player.UsingTool = false;
     }
 
     public void Update()
@@ -52,33 +69,36 @@ public sealed class AnimationCancelerService
                 return;
         }
 
-        // Cancel if currently swinging and hit has registered
         if (player.UsingTool)
         {
-            TryCancelToolAnimation(player, isWeapon && !isScythe);
+            int animIndex = player.FarmerSprite.currentAnimationIndex;
+
+            if (isWeapon && !isScythe)
+            {
+                // Weapons deal damage on frame index 2; cancel once swipe damage phase completes
+                if (animIndex >= 2)
+                {
+                    player.completelyStopAnimatingOrDoingAction();
+                    player.forceCanMove();
+                    player.UsingTool = false;
+                }
+            }
+            else
+            {
+                // Tool hit is primarily canceled via Tool.DoFunction Harmony postfix.
+                // Fallback: If animation reaches recovery frame (index >= 3), cancel.
+                if (animIndex >= 3)
+                {
+                    player.completelyStopAnimatingOrDoingAction();
+                    player.forceCanMove();
+                    player.UsingTool = false;
+                }
+            }
         }
         else if (player.CanMove)
         {
             // Initiate the swing on the next available tick
             Game1.pressUseToolButton();
-        }
-    }
-
-    private void TryCancelToolAnimation(Farmer player, bool isActualWeapon)
-    {
-        int animIndex = player.FarmerSprite.currentAnimationIndex;
-
-        // For tools, canReleaseTool becomes true once DoFunction/hit has executed.
-        // For weapons, animation index >= 2 is post-damage hitbox activation.
-        bool hitHasLanded = isActualWeapon
-            ? animIndex >= 2
-            : player.canReleaseTool || animIndex >= 1;
-
-        if (hitHasLanded)
-        {
-            player.completelyStopAnimatingOrDoingAction();
-            player.forceCanMove();
-            player.UsingTool = false;
         }
     }
 }

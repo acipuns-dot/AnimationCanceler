@@ -15,10 +15,13 @@ public sealed class ModEntry : Mod
         _config = helper.ReadConfig<ModConfig>();
         _cancelerService = new AnimationCancelerService(_config, helper, Monitor);
 
+        var harmony = new HarmonyLib.Harmony(ModManifest.UniqueID);
+        Patches.ToolPatches.Apply(harmony);
+
         helper.Events.GameLoop.GameLaunched += OnGameLaunched;
         helper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
 
-        Monitor.Log("Animation Canceler initialized.", LogLevel.Info);
+        Monitor.Log("Animation Canceler initialized with Harmony patches.", LogLevel.Info);
     }
 
     private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
