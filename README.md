@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ Animation Canceler
+# Animation Canceler
 
 **Effortless, rapid tool animation canceling for Stardew Valley 1.6+**
 
@@ -11,18 +11,18 @@
 [![Generic Mod Config Menu](https://img.shields.io/badge/GMCM-Integrated-orange.svg)](https://www.nexusmods.com/stardewvalley/mods/5098)
 
 <p align="center">
-  <b>Hold a single key to chop trees, break rocks, till soil, and water crops at lightning speed with automatic post-swing recovery cancellation and smart energy protection.</b>
+  <b>Hold a single key to chop trees, break rocks, till soil, and water crops at maximum speed with automatic post-swing recovery cancellation and smart energy protection.</b>
 </p>
 
 ---
 
 </div>
 
-## 📖 Overview
+## Overview
 
 In vanilla *Stardew Valley*, swinging a tool incurs a lengthy post-impact recovery animation before your character can move or swing again.
 
-**Animation Canceler** hooks directly into SMAPI and Harmony to detect the exact frame your tool impacts the world. By holding your configured activation key (default: `Space`), the mod instantly cancels the recovery frames and begins the next swing, giving you maximum gathering efficiency without finger fatigue or complex multi-key macros.
+**Animation Canceler** hooks directly into SMAPI and Harmony to detect the exact frame your tool impacts the world. By holding your configured activation key (default: `Space`), the mod instantly cancels the recovery frames and begins the next swing, providing continuous gathering efficiency without finger fatigue or multi-key macros.
 
 ```mermaid
 flowchart LR
@@ -34,8 +34,8 @@ flowchart LR
     E --> F[Harmony: DoFunction Lands]
     F --> G{Hit Valid Target?}
     G -- Yes --> H[Normal Stamina Depletion]
-    G -- No --> I[🛡️ Refund Stamina / Miss Protection]
-    H --> J[⚡ Cut Recovery Frames]
+    G -- No --> I[Refund Stamina / Miss Protection]
+    H --> J[Cut Recovery Frames]
     I --> J
     J --> K[Player Reset & Can Move]
     K -. Repeat Next Tick .-> A
@@ -43,36 +43,36 @@ flowchart LR
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### ⚡ Rapid Gathering
-- **Single-Key Activation:** Just hold `Space` while holding any gathering tool.
-- **Microsecond Precision:** Cancels the animation the exact instant `Tool.DoFunction` registers on the map.
+### Rapid Gathering
+- **Single-Key Activation:** Hold `Space` while holding any gathering tool.
+- **Precision Timing:** Cancels the animation the exact instant `Tool.DoFunction` registers on the map.
 
-### 🛡️ Smart Stamina Miss Protection
-- **No Wasted Energy:** In vanilla Stardew, swinging a tool at empty air costs standard stamina. With **Animation Canceler**, swinging at nothing, missing, or watering already-watered tiles refunds your stamina immediately.
+### Smart Stamina Miss Protection
+- **No Wasted Energy:** In vanilla Stardew, swinging a tool at empty air consumes stamina. With **Animation Canceler**, swinging at air, missing, or watering already-watered tiles refunds your stamina immediately.
 - **Exhaustion Guard:** Automatically halts auto-swinging when your energy drops to or below your configured safety threshold (default: `10`), preventing collapse.
 
-### 🔨 Upgraded Tool Support
+### Upgraded Tool Support
 - Upgraded tools (Copper, Steel, Gold, Iridium) normally lock into a charging state when tool buttons are held. **Animation Canceler** releases the tool on frame one, allowing continuous single-tile rapid swings without getting stuck.
 
 ---
 
-## 🧰 Supported Tools
+## Supported Tools
 
 | Tool | Action | Hit Detection (Miss Protection) |
 |:---:|:---|:---|
-| 🪓 **Axe** | Woodcutting & Clearing | Trees, Fruit Trees, Bushes, Giant Crops, Stumps, Hollow Logs, Twigs, Weeds |
-| ⛏️ **Pickaxe** | Mining & Quarrying | Stones, Ore Nodes, Resource Clumps (Boulders, Meteors), Flooring, Tilled Soil (un-till) |
-| 🧑‍🌾 **Hoe** | Tilling & Harvesting | Diggable Ground, Artifact Spots, Forage, Harvestable Crops |
-| 💧 **Watering Can** | Watering & Refilling | Un-watered Tilled Soil, Water Tiles (refill), Pet Bowls, Water Troughs |
+| **Axe** | Woodcutting & Clearing | Trees, Fruit Trees, Bushes, Giant Crops, Stumps, Hollow Logs, Twigs, Weeds |
+| **Pickaxe** | Mining & Quarrying | Stones, Ore Nodes, Resource Clumps (Boulders, Meteors), Flooring, Tilled Soil (un-till) |
+| **Hoe** | Tilling & Harvesting | Diggable Ground, Artifact Spots, Forage, Harvestable Crops |
+| **Watering Can** | Watering & Refilling | Un-watered Tilled Soil, Water Tiles (refill), Pet Bowls, Water Troughs |
 
 > [!NOTE]
 > **Weapons & Scythes:** This mod is purposefully dedicated to **gathering tools**. Melee weapons and scythes are excluded to preserve vanilla combat balance and avoid conflicting swipe mechanics.
 
 ---
 
-## 📦 Requirements
+## Requirements
 
 - **[Stardew Valley](https://www.stardewvalley.net/)** (v1.6.0 or newer)
 - **[SMAPI](https://smapi.io/)** (v4.0.0 or newer)
@@ -80,7 +80,7 @@ flowchart LR
 
 ---
 
-## 🚀 Installation
+## Installation
 
 1. Download the latest release from the [GitHub Releases](https://github.com/acipuns-dot/AnimationCanceler/releases) tab.
 2. Extract the downloaded `.zip` file.
@@ -93,7 +93,7 @@ flowchart LR
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 Configure the mod in-game using **Generic Mod Config Menu**, or edit `config.json` generated in the mod folder after first launch:
 
@@ -119,7 +119,7 @@ Configure the mod in-game using **Generic Mod Config Menu**, or edit `config.jso
 
 ---
 
-## 🛠️ Building from Source
+## Building from Source
 
 This project targets **.NET 6.0** and uses [Pathoschild.Stardew.ModBuildConfig](https://github.com/Pathoschild/SMAPI#readme).
 
@@ -135,6 +135,6 @@ This project targets **.NET 6.0** and uses [Pathoschild.Stardew.ModBuildConfig](
 
 ---
 
-## 📄 License
+## License
 
 Distributed under the **MIT License**. See `LICENSE` for details.
